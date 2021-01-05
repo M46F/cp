@@ -1,0 +1,92 @@
+# include<iostream>
+# include<climits>
+# include <stdio.h>
+# include <math.h>
+# include <string>
+# include <bits/stdc++.h>
+
+# define PI 3.14159265
+
+using namespace std;
+
+
+struct Teque {
+    int left;
+    int right;
+    deque<int> lque;
+    deque<int> rque;
+};
+
+
+void push_back(Teque& tq, int val){
+    if (tq.right > tq.left) {
+        int front_right = tq.rque.front();
+        tq.lque.push_back(front_right);
+        tq.rque.pop_front();
+        tq.left += 1;
+        tq.right -= 1;
+    }
+    tq.right += 1;
+    tq.rque.push_back(val);
+}
+
+
+void push_front(Teque& tq, int val) {
+    if (tq.left >  tq.right) {
+        int back_left = tq.lque.back();
+        tq.rque.push_front(back_left);
+        tq.lque.pop_back();
+        tq.left -= 1;
+        tq.right += 1;
+    }
+
+    tq.left += 1;
+    tq.lque.push_front(val);
+
+}
+
+
+void push_middle(Teque& tq, int val) {
+    if (tq.left > tq.right){
+        tq.rque.push_front(val);
+        tq.right += 1;
+    } else {
+        tq.lque.push_back(val);
+        tq.left += 1;
+    }
+}
+
+
+int get(Teque& tq, int idx) {
+    if(idx >= tq.left) {
+        return tq.rque.at(idx-tq.left);
+    } else {
+        return tq.lque.at(idx);
+    }
+}
+
+
+int main(){
+    deque<int> lque;
+    deque<int> rque;
+    struct Teque tq = {0,0, lque, rque};
+
+    int N;
+    scanf("%i\n", &N);
+    for(int i = 0; i < N; i++){
+        string cmd;
+        int val;
+        cin >> cmd >> val;
+        if(cmd == "push_back"){
+            push_back(tq, val);
+        } else if (cmd == "push_front") {
+            push_front(tq, val);
+        } else if (cmd == "push_middle") {
+            push_middle(tq, val);
+        } else {
+            cout << get(tq, val)<<endl;
+        }
+    }
+
+    return 0;
+}
